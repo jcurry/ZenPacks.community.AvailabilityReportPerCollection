@@ -75,9 +75,9 @@ Screenshots
 
 .. External References Below. Nothing Below This Line Should Be Rendered
 
-.. _Latest Package for Python 2.6: https://github.com/jcurry/ZenPacks.common.AvailabilityReportPerCollection/blob/master/dist/ZenPacks.common.AvailabilityReportPerCollection-1.2.7-py2.6.egg?raw=true
+.. _Latest Package for Python 2.6: https://github.com/jcurry/ZenPacks.community.AvailabilityReportPerCollection/blob/master/dist/ZenPacks.community.AvailabilityReportPerCollection-1.2.7-py2.6.egg?raw=true
 
-.. |AvailabilityReportPerCollection| image:: http://github.com/jcurry/ZenPacks.common.AvailabilityReportPerCollection/raw/master/screenshots/AvailabilityReportPerCollection.jpg
+.. |AvailabilityReportPerCollection| image:: http://github.com/jcurry/ZenPacks.community.AvailabilityReportPerCollection/raw/master/screenshots/AvailabilityReportPerCollection.jpg
 
                                                                         
 
