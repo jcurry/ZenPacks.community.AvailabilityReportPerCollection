@@ -3,7 +3,7 @@
 # or saved.  Do not modify them directly here.
 # NB: PACKAGES is deprecated
 NAME = "ZenPacks.community.AvailabilityReportPerCollection"
-VERSION = "1.2.7"
+VERSION = "1.2.8"
 AUTHOR = "Jane Curry"
 LICENSE = ""
 NAMESPACE_PACKAGES = ['ZenPacks', 'ZenPacks.community']

@@ -66,6 +66,7 @@ Change History
     * Updated to 1.2.5 - removed code that tries to link to a device's homepage and component - see updated, page as referenced above.
     * Updated to 1.2.6 - removed old code from egg file
     * Updated to 1.2.7 - new github build
+    * Updated to 1.2.8 - Device field now uses device title rather than device id so friendly names are used
 
 
 Screenshots
@@ -75,7 +76,7 @@ Screenshots
 
 .. External References Below. Nothing Below This Line Should Be Rendered
 
-.. _Latest Package for Python 2.6: https://github.com/jcurry/ZenPacks.community.AvailabilityReportPerCollection/blob/master/dist/ZenPacks.community.AvailabilityReportPerCollection-1.2.7-py2.6.egg?raw=true
+.. _Latest Package for Python 2.6: https://github.com/jcurry/ZenPacks.community.AvailabilityReportPerCollection/blob/master/dist/ZenPacks.community.AvailabilityReportPerCollection-1.2.8-py2.6.egg?raw=true
 
 .. |AvailabilityReportPerCollection| image:: http://github.com/jcurry/ZenPacks.community.AvailabilityReportPerCollection/raw/master/screenshots/AvailabilityReportPerCollection.jpg
 
