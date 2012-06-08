@@ -5,7 +5,7 @@
 NAME = "ZenPacks.community.AvailabilityReportPerCollection"
 VERSION = "1.2.8"
 AUTHOR = "Jane Curry"
-LICENSE = ""
+LICENSE = "GPLv2"
 NAMESPACE_PACKAGES = ['ZenPacks', 'ZenPacks.community']
 PACKAGES = ['ZenPacks', 'ZenPacks.community', 'ZenPacks.community.AvailabilityReportPerCollection']
 INSTALL_REQUIRES = []
