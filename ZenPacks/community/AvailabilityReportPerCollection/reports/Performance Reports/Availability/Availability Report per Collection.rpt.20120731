@@ -151,19 +151,9 @@
                     comp python:avail.getComponent(here.dmd);" 
     >
       <td class="tablevalues"
-          tal:condition="dev"
-          tal:content="structure dev"/>
-      <td class="tablevalues"
-          tal:condition="not:dev"
-          tal:content="avail/device"/>
+          	  tal:content="avail/device"/>
       <td class="tablevalues" 
-          tal:condition="not:comp" 
-          tal:content="avail/component"/>
-      <td class="tablevalues" 
-          tal:condition="comp">
-          <a tal:content="avail/component"
-             tal:attributes="href comp/getPrimaryUrlPath"/>
-      </td>
+ 	          tal:content="avail/component"/>
       <td class="tablevalues" 
 		  tal:content="avail/groups" />
       <td class="tablevalues" 

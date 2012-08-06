@@ -20,7 +20,6 @@
     endDate python:sts(tableName, 'endDate', 
                          zem.defaultAvailabilityEnd());
     objects python:here.ReportServer.plugin('AvailabilityCollection', here.REQUEST);
-    objects python: (hasattr(request, 'doExport') and list(objects)) or objects;
     batch python:tm.getBatch(tableName,objects);
 	exportFields python:['device', 'component', 'groups', 'Csystems', 'location', 'DeviceClass', 'availability'];
 	">
@@ -36,6 +35,8 @@
 <script type="text/javascript" 
         src="/zport/portal_skins/zenmodel/datePicker.js">
 </script>
+
+<span>
 
 <form id="availabilityForm" method="submit">
 <table class="zentable" cellpadding="3" cellspacing="1">
@@ -146,7 +147,9 @@
                           tableName,'availability','Availability')"/>
   </tr>
   <tal:block tal:repeat="avail batch">
-    <tr>
+    <tr tal:define="dev python:avail.getDeviceLink(here.dmd);
+                    comp python:avail.getComponent(here.dmd);" 
+    >
       <td class="tablevalues"
           	  tal:content="avail/device"/>
       <td class="tablevalues" 
@@ -171,6 +174,7 @@
 </tal:block>
 </tal:block>
 </form>
+</span>
 </tal:block>
 </tal:block>
 

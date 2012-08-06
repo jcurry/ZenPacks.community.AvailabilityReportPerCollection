@@ -67,6 +67,8 @@ Change History
     * Updated to 1.2.6 - removed old code from egg file
     * Updated to 1.2.7 - new github build
     * Updated to 1.2.8 - Device field now uses device title rather than device id so friendly names are used
+    * Updated to 1.2.9 - Device field now uses device titleOrId  - fixes issue whereby devices without title field don't show up
+                         Export All still doesn't work - this is more generic than just this ZenPack
 
 
 Screenshots

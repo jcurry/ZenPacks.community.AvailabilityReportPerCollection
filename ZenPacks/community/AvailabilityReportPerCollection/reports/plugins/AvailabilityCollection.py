@@ -250,14 +250,14 @@ class CReport:
             else:
                 allDevices = {}
                 for d in dmd.Devices.getSubDevices():
-                    allDevices[d.title] = d
+                    allDevices[d.titleOrId()] = d
 
                 deviceClassDevices = set()
                 if self.DeviceClass:
                     try:
                         org = dmd.Devices.getOrganizer(self.DeviceClass)
                         for d in org.getSubDevices():
-                            deviceClassDevices.add(d.title)
+                            deviceClassDevices.add(d.titleOrId())
                     except KeyError:
                         pass
                 else:
@@ -268,7 +268,7 @@ class CReport:
                     try:
                         org = dmd.Locations.getOrganizer(self.location)
                         for d in org.getSubDevices():
-                            locationDevices.add(d.title)
+                            locationDevices.add(d.titleOrId())
                     except KeyError:
                         pass
                 else:
@@ -279,7 +279,7 @@ class CReport:
                     try:
                         org = dmd.Systems.getOrganizer(self.Csystems)
                         for d in org.getSubDevices():
-                            systemDevices.add(d.title)
+                            systemDevices.add(d.titleOrId())
                     except KeyError:
                         pass
                 else:
@@ -290,7 +290,7 @@ class CReport:
                     try:
                         org = dmd.Groups.getOrganizer(self.groups)
                         for d in org.getSubDevices():
-                            deviceGroupDevices.add(d.title)
+                            deviceGroupDevices.add(d.titleOrId())
                     except KeyError:
                         pass
                 else:
@@ -303,8 +303,8 @@ class CReport:
 
             if not self.component:
                 for d in dmd.Devices.getSubDevices():
-                    devices.setdefault( (d.title, self.component), 0)
-        deviceLookup = dict([(d.title, d) for d in deviceList])
+                    devices.setdefault( (d.titleOrId(), self.component), 0)
+        deviceLookup = dict([(d.titleOrId(), d) for d in deviceList])
         result = []
         for (d, c), v in devices.items():
 #            availColLog.write(' in result loop - d is  %s, c is %s, v is %12.1f  \n' %(d, c, v))
@@ -327,7 +327,7 @@ class CReport:
                 if d.productionState == 1000:
                     for c in d.getMonitoredComponents():
                         if c.name().find(self.component) >= 0:
-                            a = AvailabilityColl(d.title, c.name(), 0, total,
+                            a = AvailabilityColl(d.titleOrId(), c.name(), 0, total,
                                 ', '.join(d.getDeviceGroupNames()), d.getSystemNamesString(), d.getLocationName(), d.getDeviceClassPath())
                             result.append(a)
 #        availColLog.close()
