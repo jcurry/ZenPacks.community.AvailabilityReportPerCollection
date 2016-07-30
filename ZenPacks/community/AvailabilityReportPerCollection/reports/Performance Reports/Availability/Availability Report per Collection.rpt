@@ -1,4 +1,3 @@
-<!-- Based on $ZENHOME/Products/ZenReports/reports/Performance_Reports/Availability_Reports.rpt  -->
 <tal:block tal:define="
     tableName string:availabilitytable;
     tm here/ZenTableManager;
@@ -8,21 +7,21 @@
     zem python:here.dmd.ZenEventManager;
     sts python:tm.setReqTableState;
     device python:sts(tableName, 'device', '');
-    component python:sts(tableName, 'component', '');
+    title python:sts(tableName, 'title', '');
+    DeviceClass python:sts(tableName, 'DeviceClass', '');
+    System python:sts(tableName, 'System', '');
+    DeviceGroup python:sts(tableName, 'DeviceGroup', '');
+    Location python:sts(tableName, 'Location', '');
+
     severity python:sts(tableName, 'severity', '4');
     eventClass python:sts(tableName, 'eventClass', '/Status/Ping');
-    groups python:sts(tableName, 'groups', '/new');
-    Csystems python:sts(tableName, 'Csystems', '/new');
-    location python:sts(tableName, 'location', '/new');
-    DeviceClass python:sts(tableName, 'DeviceClass', '/new');
     startDate python:sts(tableName, 'startDate', 
                          zem.defaultAvailabilityStart());
     endDate python:sts(tableName, 'endDate', 
                          zem.defaultAvailabilityEnd());
     objects python:here.ReportServer.plugin('AvailabilityCollection', here.REQUEST);
-    objects python: (hasattr(request, 'doExport') and list(objects)) or objects;
     batch python:tm.getBatch(tableName,objects);
-	exportFields python:['device', 'component', 'groups', 'Csystems', 'location', 'DeviceClass', 'availability'];
+	exportFields python:['device', DeviceGroup, System, Location, DeviceClass, 'availability'];
 	">
 <tal:block metal:use-macro="here/reportMacros/macros/exportableReport">
 <tal:block metal:fill-slot="report">
@@ -37,50 +36,75 @@
         src="/zport/portal_skins/zenmodel/datePicker.js">
 </script>
 
+<span>
+
 <form id="availabilityForm" method="submit">
 <table class="zentable" cellpadding="3" cellspacing="1">
     <tr>
-       <td class="tableheader">Device:</td>
-       <td class="tablevalues">
+        <td class="tableheader">Device Class:</td>
+        <td class="tablevalues">
+            <select class="tablevalues" name="DeviceClass"
+                tal:define="
+                orgs python:here.getDmdRoot('Devices').getOrganizerNames();
+                deviceOrgs python:orgs;
+                ">
+             <option tal:repeat="org deviceOrgs"
+                     tal:attributes="value org; selected python:org==DeviceClass"
+                     tal:content="org"/>
+          </select>
+
+        </td>
+        <td class="tableheader">Systems:</td>
+        <td class="tablevalues">
+            <select class="tablevalues" name="System"
+                tal:define="
+                orgs python:here.getDmdRoot('Systems').getOrganizerNames();
+                systemOrgs python:orgs;
+                ">
+             <option tal:repeat="org systemOrgs"
+                     tal:attributes="value org; selected python:org==System"
+                     tal:content="org"/>
+          </select>
+        </td>
+
+    </tr><tr>
+        <td class="tableheader">Groups:</td>
+        <td class="tablevalues">
+            <select class="tablevalues" name="DeviceGroup"
+                tal:define="
+                orgs python:here.getDmdRoot('Groups').getOrganizerNames();
+                groupOrgs python:orgs;
+                ">
+             <option tal:repeat="org groupOrgs"
+                     tal:attributes="value org; selected python:org==DeviceGroup"
+                     tal:content="org"/>
+          </select>
+
+        </td>
+        <td class="tableheader">Locations:</td>
+        <td class="tablevalues">
+            <select class="tablevalues" name="Location"
+                tal:define="
+                orgs python:here.getDmdRoot('Locations').getOrganizerNames();
+                locationOrgs python:orgs;
+                ">
+             <option tal:repeat="org locationOrgs"
+                     tal:attributes="value org; selected python:org==Location"
+                     tal:content="org"/>
+          </select>
+        </td>
+
+    </tr><tr>
+        <td class="tableheader">Device Id:</td>
+        <td class="tablevalues">
            <input class="tablevalues" name="device"
-                  tal:attributes="value device">
-      </td>
-      <td class="tableheader">DeviceClass:</td>
-       <td class="tablevalues"><select class="tablevalues" name="DeviceClass">
-            <option tal:repeat="org here/Devices/getOrganizerNames"
-                    tal:content="org"
-                    tal:attributes="selected python:org==DeviceClass"/>
-           </select>
-       </td>
-    </tr><tr>
-       <td class="tableheader">Group:</td>
-       <td class="tablevalues"><select class="tablevalues" name="groups">
-            <option tal:repeat="org here/Groups/getOrganizerNames"
-                    tal:content="org"
-                    tal:attributes="selected python:org==groups"/>
-           </select>
-       </td>
-       <td class="tableheader">System:</td>
-       <td class="tablevalues"><select class="tablevalues" name="Csystems">
-            <option tal:repeat="org here/Systems/getOrganizerNames"
-                    tal:content="org"
-                    tal:attributes="selected python:org==Csystems"/>
-           </select>
-       </td>
-    </tr><tr>
-    <tr>
-       <td class="tableheader">Location:</td>
-       <td class="tablevalues"><select class="tablevalues" name="location">
-            <option tal:repeat="org here/Locations/getOrganizerNames"
-                    tal:content="org"
-                    tal:attributes="selected python:org==location"/>
-           </select>
-       </td>
-       <td class="tableheader">Component:</td>
-       <td class="tablevalues">
-          <input class="tablevalues" name="component" 
-                 tal:attributes="value component">
-       </td>
+                  tal:attributes="value device"/>
+        </td>
+        <td class="tableheader">Device Title:</td>
+        <td class="tablevalues">
+           <input class="tablevalues" name="title"
+                  tal:attributes="value title"/>
+        </td>
     </tr><tr>
         <td class="tableheader">Start Date:</td>
         <td class="tablevalues"><input class="tablevalues" 
@@ -99,13 +123,13 @@
     </tr><tr>
        <td class="tableheader">Event Class:</td>
        <td class="tablevalues"><select class="tablevalues" name="eventClass">
-            <option tal:repeat="org here/dmd/Events/getOrganizerNames"
+            <option tal:repeat="org here/getEventClassNames"
                     tal:content="org"
                     tal:attributes="selected python:org==eventClass"/>
            </select>
        </td>
-       <td class="tableheader">Severity:</td>
-       <td class="tablevalues"><select class="tablevalues" name="severity">
+        <td class="tableheader">Severity:</td>
+        <td class="tablevalues"><select class="tablevalues" name="severity">
             <option tal:repeat="sev here/dmd/ZenEventManager/getSeverities"
                     tal:content="python:sev[0]"
                     tal:attributes="
@@ -113,14 +137,19 @@
                        selected python:str(sev[1])==str(severity);
                     "/>
            </select>
-       </td>
+        </td>
+
     </tr><tr>
        <td class="tablevalues" colspan="4">
-         <input class="tablevalues" type="Submit" value="Update"/>
+         <input class="tablevalues" type="Submit" value="Generate"/>
        </td> 
     </tr>
 </table>
 </form>
+
+<script type="text/javascript">
+    addDateRange('startDate', 'endDate');
+</script>
 
 <form method="POST" tal:attributes="action request/URL;"
 			tal:define="tabletitle string:Device Availability;
@@ -131,39 +160,44 @@
 
   <tr>
     <th tal:replace="structure python:tm.getTableHeader(
-                          tableName,'device','Device')"/>
+                          tableName,'device','Device Id')"/>
     <th tal:replace="structure python:tm.getTableHeader(
-                          tableName,'component','Component')"/>
+                          tableName,'title','Title')"/>
     <th tal:replace="structure python:tm.getTableHeader(
-                          tableName,'groups','Groups')"/>
+                          tableName,'DeviceGroup','Groups')"/>
     <th tal:replace="structure python:tm.getTableHeader(
-                          tableName,'Csystems','Systems')"/>
+                          tableName,'System','Systems')"/>
     <th tal:replace="structure python:tm.getTableHeader(
-                          tableName,'location','Locations')"/>
+                          tableName,'Location','Locations')"/>
     <th tal:replace="structure python:tm.getTableHeader(
                           tableName,'DeviceClass','Device Class')"/>
     <th tal:replace="structure python:tm.getTableHeader(
                           tableName,'availability','Availability')"/>
   </tr>
   <tal:block tal:repeat="avail batch">
-    <tr>
+    <tr tal:define="dev python:avail.getDeviceLink();"
+    >
       <td class="tablevalues"
-          	  tal:content="avail/device"/>
+          tal:condition="dev"
+          tal:content="structure dev"/>
+      <td class="tablevalues"
+          tal:condition="not:dev"
+          tal:content="avail/device"/>
+      <td class="tablevalues"
+                  tal:content="avail/title" />
+      <td class="tablevalues"
+                  tal:content="avail/groups" />
       <td class="tablevalues" 
- 	          tal:content="avail/component"/>
-      <td class="tablevalues" 
-		  tal:content="avail/groups" />
-      <td class="tablevalues" 
-		  tal:content="avail/Csystems" />
-      <td class="tablevalues" 
-		  tal:content="avail/location" />
-      <td class="tablevalues" 
-		  tal:content="avail/DeviceClass" />
+		  tal:content="avail/systems" />
+      <td class="tablevalues"
+                  tal:content="avail/location" />
+      <td class="tablevalues"
+                  tal:content="avail/DeviceClass" />
       <td class="tablevalues" tal:content="avail/floatStr"/>
    </tr>
   </tal:block>
   <tr>
-      <td colspan="5" class="tableheader" align='center'>
+      <td colspan="7" class="tableheader" align='center'>
       <form metal:use-macro="here/zenTableNavigation/macros/navtool"/>
       </td>
   </tr>
@@ -171,10 +205,10 @@
 </tal:block>
 </tal:block>
 </form>
+</span>
 </tal:block>
 </tal:block>
 
 </tal:block>
 </tal:block>
 </tal:block>
-
