@@ -29,7 +29,7 @@ Download
 Download the appropriate package for your Zenoss version from the list
 below.
 
-* Zenoss 3.0+ `Latest Package for Python 2.6`_
+* Zenoss 3.0+ `Latest Package for Python 2.7`_
 
 Installation
 ============
@@ -69,6 +69,8 @@ Change History
     * Updated to 1.2.8 - Device field now uses device title rather than device id so friendly names are used
     * Updated to 1.2.9 - Device field now uses device titleOrId  - fixes issue whereby devices without title field don't show up
                          Export All still doesn't work - this is more generic than just this ZenPack
+    * Updated to 1.3.0 - Based on ZenEvents/Availability from Zenoss Core 4.2.5, SUP 671
+                         Outputs device id, link and title.  Regex match for device name or title
 
 
 Screenshots
@@ -78,7 +80,7 @@ Screenshots
 
 .. External References Below. Nothing Below This Line Should Be Rendered
 
-.. _Latest Package for Python 2.6: https://github.com/jcurry/ZenPacks.community.AvailabilityReportPerCollection/blob/master/dist/ZenPacks.community.AvailabilityReportPerCollection-1.2.8-py2.6.egg?raw=true
+.. _Latest Package for Python 2.7: https://github.com/jcurry/ZenPacks.community.AvailabilityReportPerCollection/blob/master/dist/ZenPacks.community.AvailabilityReportPerCollection-1.3.0-py2.7.egg?raw=true
 
 .. |AvailabilityReportPerCollection| image:: http://github.com/jcurry/ZenPacks.community.AvailabilityReportPerCollection/raw/master/screenshots/AvailabilityReportPerCollection.jpg
 

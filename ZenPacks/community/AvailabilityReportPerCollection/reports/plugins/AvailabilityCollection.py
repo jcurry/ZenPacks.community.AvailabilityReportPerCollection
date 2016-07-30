@@ -292,13 +292,14 @@ class CReport(object):
         # 1. get open events
         create_filter_args['first_seen'] = (0,endDate)
         create_filter_args['status'] = OPEN_EVENT_STATUSES
-        rf2.write( ' create_filter_args dictionary is %s \n' % (create_filter_args))
+        rf2.write( ' create_filter_args dictionary for open events is %s \n' % (create_filter_args))
         event_filter = zep.createEventFilter(**create_filter_args)
         open_events = zep.getEventSummariesGenerator(event_filter)
 
         # 2. get closed events
         create_filter_args['status_change'] = (startDate+1,)
         create_filter_args['status'] = CLOSED_EVENT_STATUSES
+        rf2.write( ' create_filter_args dictionary for closed events is %s \n' % (create_filter_args))
         event_filter = zep.createEventFilter(**create_filter_args)
         closed_events = zep.getEventSummariesGenerator(event_filter)
         # must also get events from archive
@@ -369,8 +370,6 @@ class AvailabilityCollection:
         DeviceClass  = REQUEST.get('DeviceClass', '/')
         startDate    = Time.ParseUSDate(REQUEST.get('startDate', zem.defaultAvailabilityStart()))
         endDate      = Time.ParseUSDate(REQUEST.get('endDate', zem.defaultAvailabilityEnd()))
-        #title        = REQUEST.get('title', '')
-        #return query(dmd, component='', eventClass=eventClass, severity=severity, device=device, DeviceGroup=DeviceGroup, System=System, Location=Location, DeviceClass=DeviceClass, startDate=startDate, endDate=endDate, title=title)
         return query(dmd, component='', eventClass=eventClass, severity=severity, device=device, DeviceGroup=DeviceGroup, System=System, Location=Location, DeviceClass=DeviceClass, startDate=startDate, endDate=endDate)
 
 rf.close()
@@ -394,14 +393,3 @@ if __name__ == '__main__':
     assert id(a) == id(b)
     pprint.pprint(r.run(z.dmd))
     print 'End of first query'
-#    r.component = 'httpd'
-#    r.eventClass = Status_OSProcess
-#    r.severity = 4
-#    pprint.pprint(r.run(z.dmd))
-#    print 'End of second query'
-#    r.device = 'rb2011.skills-1st.co.uk'
-#    r.component = 'ether5'
-#    r.eventClass = Status_Snmp
-#    r.severity = 4
-#    pprint.pprint(r.run(z.dmd))
-#    print 'End of  third query'
