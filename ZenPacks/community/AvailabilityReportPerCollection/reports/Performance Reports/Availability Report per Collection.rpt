@@ -7,6 +7,7 @@
     zem python:here.dmd.ZenEventManager;
     sts python:tm.setReqTableState;
     device python:sts(tableName, 'device', '');
+    link python:sts(tableName, 'link', '');
     title python:sts(tableName, 'title', '');
     DeviceClass python:sts(tableName, 'DeviceClass', '');
     System python:sts(tableName, 'System', '');
@@ -100,11 +101,14 @@
            <input class="tablevalues" name="device"
                   tal:attributes="value device"/>
         </td>
+        <!--
         <td class="tableheader">Device Title:</td>
         <td class="tablevalues">
            <input class="tablevalues" name="title"
                   tal:attributes="value title"/>
         </td>
+        -->
+
     </tr><tr>
         <td class="tableheader">Start Date:</td>
         <td class="tablevalues"><input class="tablevalues" 
@@ -162,6 +166,8 @@
     <th tal:replace="structure python:tm.getTableHeader(
                           tableName,'device','Device Id')"/>
     <th tal:replace="structure python:tm.getTableHeader(
+                          tableName,'link','Device Link')"/>
+    <th tal:replace="structure python:tm.getTableHeader(
                           tableName,'title','Title')"/>
     <th tal:replace="structure python:tm.getTableHeader(
                           tableName,'DeviceGroup','Groups')"/>
@@ -175,13 +181,15 @@
                           tableName,'availability','Availability')"/>
   </tr>
   <tal:block tal:repeat="avail batch">
-    <tr tal:define="dev python:avail.getDeviceLink();"
+    <tr tal:define="devlink python:avail.getDeviceLink();"
     >
       <td class="tablevalues"
-          tal:condition="dev"
-          tal:content="structure dev"/>
+                  tal:content="avail/device" />
       <td class="tablevalues"
-          tal:condition="not:dev"
+          tal:condition="devlink"
+          tal:content="structure devlink"/>
+      <td class="tablevalues"
+          tal:condition="not:devlink"
           tal:content="avail/device"/>
       <td class="tablevalues"
                   tal:content="avail/title" />
