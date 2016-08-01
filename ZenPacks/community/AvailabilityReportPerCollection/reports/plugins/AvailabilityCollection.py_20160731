@@ -89,7 +89,7 @@ class AvailabilityColl(object):
         return time.time()
 
     # Simple record for holding availability information
-    def __init__(self, device, component, downtime, total, DeviceGroup = '', System='', Location='', DeviceClass='', link='', title=''):
+    def __init__(self, device = '', component = '', downtime = 0, total = 0, DeviceGroup = '', System='', Location='', DeviceClass='', link='', title=''):
         self.device = device
         self.component = component
         self.systems = System
@@ -173,7 +173,8 @@ class CReport(object):
         self.severity = int(severity) if severity is not None else None
         self.device = device
         self.component = component
-        self.prodState = int(prodState) if prodState is not None else None
+        #self.prodState = int(prodState) if prodState is not None else None
+        self.prodState = prodState 
         self.manager = manager
         self.agent = agent
         self.DeviceClass = DeviceClass
@@ -212,10 +213,8 @@ class CReport(object):
         #rf2.write('CReport - in run - after self. statements \n')
         rf2.write('CReport - start of run \n')
         path = '/zport/dmd/'
-        pathFilterList = [Generic('path',{'query':path})]
+        pathFilterList = [Generic('path',{'query':''.join([path,'Devices',self.DeviceClass or ''])})]
 
-        if self.DeviceClass: 
-            pathFilterList.append(Generic('path',{'query': ''.join([path,'Devices',self.DeviceClass])}))
         if self.Location:
             pathFilterList.append(Generic('path',{'query': ''.join([path,'Locations',self.Location])}))
         if self.System:
