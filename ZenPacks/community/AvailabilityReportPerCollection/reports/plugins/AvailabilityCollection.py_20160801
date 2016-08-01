@@ -346,15 +346,12 @@ class CReport(object):
 def query(dmd, *args, **kwargs):
     r = CReport(*args, **kwargs)
     # Hash out the cacheing - causes problems ??
-    #try:
-    #    return _cache[r.tuple()]
-    #except KeyError:
-    #    result = r.run(dmd)
-    #    _cache[r.tuple()] = result
-    #    return result
-
-    result = r.run(dmd)
-    return result
+    try:
+        return _cache[r.tuple()]
+    except KeyError:
+        result = r.run(dmd)
+        _cache[r.tuple()] = result
+        return result
 
 
 class AvailabilityCollection:
