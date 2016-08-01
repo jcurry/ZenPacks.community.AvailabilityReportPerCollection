@@ -20,9 +20,10 @@
                          zem.defaultAvailabilityStart());
     endDate python:sts(tableName, 'endDate', 
                          zem.defaultAvailabilityEnd());
+
     objects python:here.ReportServer.plugin('AvailabilityCollection', here.REQUEST);
     batch python:tm.getBatch(tableName,objects);
-	exportFields python:['device', DeviceGroup, System, Location, DeviceClass, 'availability'];
+	exportFields python:['device', 'DeviceGroup', 'title', 'System', 'Location', 'DeviceClass', 'availability'];
 	">
 <tal:block metal:use-macro="here/reportMacros/macros/exportableReport">
 <tal:block metal:fill-slot="report">
