@@ -209,9 +209,13 @@ class CReport(object):
         now = time.time()
         zep = getFacade("zep", dmd)
 
+        #rf2.write('CReport - in run - after self. statements \n')
         rf2.write('CReport - start of run \n')
         path = '/zport/dmd/'
+        #pathFilterList = [Generic('path',{'query':path})]
         pathFilterList = [Generic('path',{'query':''.join([path,'Devices',self.DeviceClass or ''])})]
+        #if self.DeviceClass: 
+        #    pathFilterList.append(Generic('path',{'query': ''.join([path,'Devices',self.DeviceClass])}))
         if self.Location:
             pathFilterList.append(Generic('path',{'query': ''.join([path,'Locations',self.Location])}))
         if self.System:
@@ -245,7 +249,7 @@ class CReport(object):
                 log.warn("Unable to unbrain at path %s", brain.getPath())
                 rf2.write( "Unable to unbrain at path %s", brain.getPath())
 
-        #rf2.write( "After brain - endDate is %s and startDate is %s \n" % (self.endDate, self.startDate))
+        rf2.write( "After brain - endDate is %s and startDate is %s \n" % (self.endDate, self.startDate))
         endDate = self.endDate or AvailabilityColl.getDefaultAvailabilityEnd()
         endDate = min(endDate, now)
         startDate = self.startDate
@@ -256,7 +260,7 @@ class CReport(object):
         startDate = int(startDate*1000)
         endDate = int(endDate*1000)
         total_report_window = endDate - startDate
-        #rf2.write( "After date manipulation - endDate is %s and startDate is %s \n" % (endDate, startDate))
+        rf2.write( "After date manipulation - endDate is %s and startDate is %s \n" % (endDate, startDate))
 
         create_filter_args = {
             'operator' : zep.AND,
@@ -307,8 +311,6 @@ class CReport(object):
         # must also get events from archive
         closed_events_from_archive = zep.getEventSummariesGenerator(event_filter, archive=True)
 
-        # Don't put print / log statements in the next block
-        #  Previous block uses a Python generator function to deliver events asynchronously
         for evtsumm in chain(open_events, closed_events, closed_events_from_archive):
             first = evtsumm['first_seen_time']
             # if event is still open, downtime persists til end of report window
@@ -331,6 +333,7 @@ class CReport(object):
             accumulator[device] += (last - first)
 
         availabilityReport = []
+        rf2.write( ' accumulator is %s \n' ( accumulator))
         for deviceId, downtime in sorted(accumulator.items()):
             device = deviceList.get(deviceId, None)
             if device:
@@ -349,15 +352,15 @@ class CReport(object):
 def query(dmd, *args, **kwargs):
     r = CReport(*args, **kwargs)
     # Hash out the cacheing - causes problems ??
-    try:
-        return _cache[r.tuple()]
-    except KeyError:
-        result = r.run(dmd)
-        _cache[r.tuple()] = result
-        return result
+    #try:
+    #    return _cache[r.tuple()]
+    #except KeyError:
+    #    result = r.run(dmd)
+    #    _cache[r.tuple()] = result
+    #    return result
 
-    #result = r.run(dmd)
-    #return result
+    result = r.run(dmd)
+    return result
 
 
 class AvailabilityCollection:

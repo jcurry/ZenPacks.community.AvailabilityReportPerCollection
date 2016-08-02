@@ -21,7 +21,11 @@
     endDate python:sts(tableName, 'endDate', 
                          zem.defaultAvailabilityEnd());
 
-    objects python:here.ReportServer.plugin('AvailabilityCollection', here.REQUEST);
+    generate python:tm.setTableState(tableName, 'generate',
+            (tm.getReqTableState(tableName, 'generate') and
+            not tm.getReqTableState(tableName, 'adapt')));
+
+    objects python:here.ReportServer.plugin('AvailabilityCollection', here.REQUEST) if generate else [];
     batch python:tm.getBatch(tableName,objects);
 	exportFields python:['device',  'title', 'availability'];
 	">
@@ -146,7 +150,7 @@
 
     </tr><tr>
        <td class="tablevalues" colspan="4">
-         <input class="tablevalues" type="Submit" value="Generate"/>
+         <input class="tablevalues" type="Submit" value="Generate" name="generate"/>
        </td> 
     </tr>
 </table>
