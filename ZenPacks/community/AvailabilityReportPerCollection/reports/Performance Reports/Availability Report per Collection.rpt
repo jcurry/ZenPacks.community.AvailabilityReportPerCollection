@@ -1,5 +1,5 @@
 <tal:block tal:define="
-    tableName string:availabilitytable;
+    tableName string:availabilityColtable;
     tm here/ZenTableManager;
     tableState python:tm.getTableState(tableName,  
                                        sortedSence='asc',

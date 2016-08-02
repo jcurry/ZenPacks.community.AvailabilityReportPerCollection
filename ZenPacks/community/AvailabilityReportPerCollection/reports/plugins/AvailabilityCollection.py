@@ -11,6 +11,7 @@
 import time
 import logging
 from itertools import takewhile, chain
+import os
 
 from Globals import InitializeClass
 from collections import defaultdict
@@ -40,8 +41,12 @@ ALL_EVENT_STATUSES = set([STATUS_NEW, STATUS_ACKNOWLEDGED,
 CLOSED_EVENT_STATUSES = set([STATUS_CLOSED, STATUS_CLEARED,
                              STATUS_DROPPED, STATUS_AGED])
 OPEN_EVENT_STATUSES = ALL_EVENT_STATUSES - CLOSED_EVENT_STATUSES
-of = open('/opt/zenoss/local/AvailabilityColl.out', 'w')
-rf = open('/opt/zenoss/local/AvailabilityRep.out', 'w')
+zenhome = os.environ['ZENHOME']
+ofFilename = zenhome + '/log/AvailabilityColl.out'
+rfFilename = zenhome + '/log/AvailabilityRep.out'
+
+of = open(ofFilename, 'w')
+rf = open(rfFilename, 'w')
 
 def _severityGreaterThanOrEqual(sev):
     """function to return a list of severities >= the given severity;
@@ -165,7 +170,8 @@ class CReport(object):
                  DeviceGroup=None,
                  DevicePriority=None,
                  monitor=None):
-        rf1 = open('/opt/zenoss/local/AvailabilityRep1.out', 'w')
+        rf1Filename = zenhome + '/log/AvailabilityRep1.out'
+        rf1 = open(rf1Filename, 'w')
         rf1.write('CReport - in init')
         self.startDate = _round(startDate)
         self.endDate = _round(endDate)
@@ -204,7 +210,8 @@ class CReport(object):
         # Note: we don't handle overlapping "down" events, so down
         # time could get get double-counted.
         __pychecker__='no-local'
-        rf2 = open('/opt/zenoss/local/AvailabilityRep2.out', 'w')
+        rf2Filename = zenhome + '/log/AvailabilityRep2.out'
+        rf2 = open(rf2Filename, 'w')
         rf2.write('CReport - in run\n')
         now = time.time()
         zep = getFacade("zep", dmd)
@@ -363,8 +370,6 @@ def query(dmd, *args, **kwargs):
 class AvailabilityCollection:
 
     def run(self, dmd, REQUEST):
-        of = open('/opt/zenoss/local/AvailabilityColl.out', 'w')
-        of.write('Start of AvailabilityCollection\n')
         zem = dmd.ZenEventManager
 
         # Get values
