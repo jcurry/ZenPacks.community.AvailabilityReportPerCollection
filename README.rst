@@ -78,7 +78,7 @@ Change History
 
 .. External References Below. Nothing Below This Line Should Be Rendered
 
-.. _Latest Package for Python 2.7: https://github.com/jcurry/ZenPacks.community.AvailabilityReportPerCollection/blob/title/dist/ZenPacks.community.AvailabilityReportPerCollection-1.3.0-py2.7.egg?raw=true
+.. _Latest Package for Python 2.7: https://github.com/jcurry/ZenPacks.community.AvailabilityReportPerCollection/blob/master/dist/ZenPacks.community.AvailabilityReportPerCollection-1.3.0-py2.7.egg?raw=true
 
 
                                                                         

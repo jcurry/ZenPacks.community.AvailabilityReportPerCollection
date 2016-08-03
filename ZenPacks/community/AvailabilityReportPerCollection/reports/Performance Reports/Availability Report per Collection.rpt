@@ -23,7 +23,7 @@
 
     objects python:here.ReportServer.plugin('AvailabilityCollection', here.REQUEST);
     batch python:tm.getBatch(tableName,objects);
-	exportFields python:['device',  'title', 'availability'];
+        exportFields python:['device', 'DeviceGroup', 'title', 'System', 'Location', 'DeviceClass', 'availability'];
 	">
 <tal:block metal:use-macro="here/reportMacros/macros/exportableReport">
 <tal:block metal:fill-slot="report">
@@ -171,6 +171,14 @@
     <th tal:replace="structure python:tm.getTableHeader(
                           tableName,'title','Title')"/>
     <th tal:replace="structure python:tm.getTableHeader(
+                          tableName,'DeviceGroup','Groups')"/>
+    <th tal:replace="structure python:tm.getTableHeader(
+                          tableName,'System','Systems')"/>
+    <th tal:replace="structure python:tm.getTableHeader(
+                          tableName,'Location','Locations')"/>
+    <th tal:replace="structure python:tm.getTableHeader(
+                          tableName,'DeviceClass','Device Class')"/>
+    <th tal:replace="structure python:tm.getTableHeader(
                           tableName,'availability','Availability')"/>
   </tr>
   <tal:block tal:repeat="avail batch">
@@ -186,6 +194,14 @@
           tal:content="avail/device"/>
       <td class="tablevalues"
                   tal:content="avail/title" />
+      <td class="tablevalues"
+                  tal:content="avail/groups" />
+      <td class="tablevalues" 
+                 tal:content="avail/systems" />
+      <td class="tablevalues"
+                  tal:content="avail/location" />
+      <td class="tablevalues"
+                  tal:content="avail/DeviceClass" />
       <td class="tablevalues" tal:content="avail/floatStr"/>
    </tr>
   </tal:block>
