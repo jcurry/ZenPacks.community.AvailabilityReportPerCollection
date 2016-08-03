@@ -76,11 +76,6 @@ Change History
                          Git title branch - output just has device id, title, link and availability
 
 
-Screenshots
-===========
-|AvailabilityReportPerCollection|
-
-
 .. External References Below. Nothing Below This Line Should Be Rendered
 
 .. _Latest Package for Python 2.7: https://github.com/jcurry/ZenPacks.community.AvailabilityReportPerCollection/blob/title/dist/ZenPacks.community.AvailabilityReportPerCollection-1.3.0-py2.7.egg?raw=true
