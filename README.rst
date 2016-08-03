@@ -71,18 +71,15 @@ Change History
                          Export All still doesn't work - this is more generic than just this ZenPack
     * Updated to 1.3.0 - Based on ZenEvents/Availability from Zenoss Core 4.2.5, SUP 671
                          Outputs device id, link and title.  Regex match for device name or title
-
-
-Screenshots
-===========
-|AvailabilityReportPerCollection|
+                         Sample reportemail included in libexec and extra screenshots
+                         Git master branch - output includes system, location, group and deviceclass
+                         Git title branch - output just has device id, title, link and availability
 
 
 .. External References Below. Nothing Below This Line Should Be Rendered
 
-.. _Latest Package for Python 2.7: https://github.com/jcurry/ZenPacks.community.AvailabilityReportPerCollection/blob/master/dist/ZenPacks.community.AvailabilityReportPerCollection-1.3.0-py2.7.egg?raw=true
+.. _Latest Package for Python 2.7: https://github.com/jcurry/ZenPacks.community.AvailabilityReportPerCollection/blob/title/dist/ZenPacks.community.AvailabilityReportPerCollection-1.3.0-py2.7.egg?raw=true
 
-.. |AvailabilityReportPerCollection| image:: http://github.com/jcurry/ZenPacks.community.AvailabilityReportPerCollection/raw/master/screenshots/AvailabilityReportPerCollection.jpg
 
                                                                         
 

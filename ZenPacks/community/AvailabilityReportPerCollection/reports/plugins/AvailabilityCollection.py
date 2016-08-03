@@ -11,6 +11,7 @@
 import time
 import logging
 from itertools import takewhile, chain
+import os
 
 from Globals import InitializeClass
 from collections import defaultdict
@@ -40,8 +41,12 @@ ALL_EVENT_STATUSES = set([STATUS_NEW, STATUS_ACKNOWLEDGED,
 CLOSED_EVENT_STATUSES = set([STATUS_CLOSED, STATUS_CLEARED,
                              STATUS_DROPPED, STATUS_AGED])
 OPEN_EVENT_STATUSES = ALL_EVENT_STATUSES - CLOSED_EVENT_STATUSES
-of = open('/opt/zenoss/local/AvailabilityColl.out', 'w')
-rf = open('/opt/zenoss/local/AvailabilityRep.out', 'w')
+zenhome = os.environ['ZENHOME']
+ofFilename = zenhome + '/log/AvailabilityColl.out'
+rfFilename = zenhome + '/log/AvailabilityRep.out'
+
+of = open(ofFilename, 'w')
+rf = open(rfFilename, 'w')
 
 def _severityGreaterThanOrEqual(sev):
     """function to return a list of severities >= the given severity;
@@ -165,7 +170,8 @@ class CReport(object):
                  DeviceGroup=None,
                  DevicePriority=None,
                  monitor=None):
-        rf1 = open('/opt/zenoss/local/AvailabilityRep1.out', 'w')
+        rf1Filename = zenhome + '/log/AvailabilityRep1.out'
+        rf1 = open(rf1Filename, 'w')
         rf1.write('CReport - in init')
         self.startDate = _round(startDate)
         self.endDate = _round(endDate)
@@ -204,18 +210,15 @@ class CReport(object):
         # Note: we don't handle overlapping "down" events, so down
         # time could get get double-counted.
         __pychecker__='no-local'
-        rf2 = open('/opt/zenoss/local/AvailabilityRep2.out', 'w')
+        rf2Filename = zenhome + '/log/AvailabilityRep2.out'
+        rf2 = open(rf2Filename, 'w')
         rf2.write('CReport - in run\n')
         now = time.time()
         zep = getFacade("zep", dmd)
 
-        #rf2.write('CReport - in run - after self. statements \n')
         rf2.write('CReport - start of run \n')
         path = '/zport/dmd/'
-        pathFilterList = [Generic('path',{'query':path})]
-
-        if self.DeviceClass: 
-            pathFilterList.append(Generic('path',{'query': ''.join([path,'Devices',self.DeviceClass])}))
+        pathFilterList = [Generic('path',{'query':''.join([path,'Devices',self.DeviceClass or ''])})]
         if self.Location:
             pathFilterList.append(Generic('path',{'query': ''.join([path,'Locations',self.Location])}))
         if self.System:
@@ -230,6 +233,7 @@ class CReport(object):
         results = ICatalogTool(dmd.Devices).search(types='Products.ZenModel.Device.Device',
                 query=And(*pathFilterList))
         rf2.write( 'pathFilterList is %s \n' % (pathFilterList))
+        rf2.write( 'results is %s \n' % (results))
 
         if not results.total:
             return []
@@ -243,9 +247,12 @@ class CReport(object):
                 deviceList[obj.id] = obj
                 tag_uuids.append(brain.uuid)
                 accumulator[obj.id] = 0
+                rf2.write( "obj is %s uuid is %s \n" % (brain.getObject(), brain.uuid))
             except Exception:
                 log.warn("Unable to unbrain at path %s", brain.getPath())
+                rf2.write( "Unable to unbrain at path %s", brain.getPath())
 
+        #rf2.write( "After brain - endDate is %s and startDate is %s \n" % (self.endDate, self.startDate))
         endDate = self.endDate or AvailabilityColl.getDefaultAvailabilityEnd()
         endDate = min(endDate, now)
         startDate = self.startDate
@@ -256,6 +263,7 @@ class CReport(object):
         startDate = int(startDate*1000)
         endDate = int(endDate*1000)
         total_report_window = endDate - startDate
+        #rf2.write( "After date manipulation - endDate is %s and startDate is %s \n" % (endDate, startDate))
 
         create_filter_args = {
             'operator' : zep.AND,
@@ -306,6 +314,8 @@ class CReport(object):
         # must also get events from archive
         closed_events_from_archive = zep.getEventSummariesGenerator(event_filter, archive=True)
 
+        # Don't put print / log statements in the next block
+        #  Previous block uses a Python generator function to deliver events asynchronously
         for evtsumm in chain(open_events, closed_events, closed_events_from_archive):
             first = evtsumm['first_seen_time']
             # if event is still open, downtime persists til end of report window
@@ -353,12 +363,13 @@ def query(dmd, *args, **kwargs):
         _cache[r.tuple()] = result
         return result
 
+    #result = r.run(dmd)
+    #return result
+
 
 class AvailabilityCollection:
 
     def run(self, dmd, REQUEST):
-        of = open('/opt/zenoss/local/AvailabilityColl.out', 'w')
-        of.write('Start of AvailabilityCollection\n')
         zem = dmd.ZenEventManager
 
         # Get values
