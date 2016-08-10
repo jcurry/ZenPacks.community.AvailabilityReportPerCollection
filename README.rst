@@ -36,7 +36,7 @@ Usage
 Note that to include availability upto and including "now", the end date must be set to "tomorrow".
 
 A version of the AvailabilityCollection plugin is provided with lots of debugging to
-$ZENHOME/log/Availability/AvailabilityRep2.out.  This logfile is recreated every time the report
+$ZENHOME/log/AvailabilityRep2.out.  This logfile is recreated every time the report
 is run so should not fill up diskspace; however this version adds *significant* performance overhead;
 do not use in production.
 
