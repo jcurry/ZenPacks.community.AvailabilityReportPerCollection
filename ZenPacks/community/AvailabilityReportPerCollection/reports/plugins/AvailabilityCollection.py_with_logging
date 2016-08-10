@@ -7,6 +7,7 @@
 #
 ##############################################################################
 
+import pprint
 
 import time
 import logging
@@ -252,6 +253,7 @@ class CReport(object):
                 log.warn("Unable to unbrain at path %s", brain.getPath())
                 rf2.write( "Unable to unbrain at path %s", brain.getPath())
 
+        rf2.write( "After brain - endDate is %s and startDate is %s \n" % (self.endDate, self.startDate))
         endDate = self.endDate or AvailabilityColl.getDefaultAvailabilityEnd()
         endDate = min(endDate, now)
         startDate = self.startDate
@@ -262,6 +264,7 @@ class CReport(object):
         startDate = int(startDate*1000)
         endDate = int(endDate*1000)
         total_report_window = endDate - startDate
+        rf2.write( "After date manipulation - endDate is %s and startDate is %s \n" % (endDate, startDate))
 
         create_filter_args = {
             'operator' : zep.AND,
@@ -302,19 +305,50 @@ class CReport(object):
         rf2.write( ' create_filter_args dictionary for open events is %s \n' % (create_filter_args))
         event_filter = zep.createEventFilter(**create_filter_args)
         open_events = zep.getEventSummariesGenerator(event_filter)
+        op_events = []
+        for e in open_events:
+            op_events.append(e)
 
+        rf2.write(' Open events are \n')
+        pprint.pprint(op_events, rf2)
+        rf2.write(' End of Open events \n')
         # 2. get closed events
         create_filter_args['status_change'] = (startDate+1,)
         create_filter_args['status'] = CLOSED_EVENT_STATUSES
         rf2.write( ' create_filter_args dictionary for closed events is %s \n' % (create_filter_args))
         event_filter = zep.createEventFilter(**create_filter_args)
         closed_events = zep.getEventSummariesGenerator(event_filter)
+        cl_events = []
+        for c in closed_events:
+            cl_events.append(c)
+        rf2.write(' Closed events are \n')
+        pprint.pprint(cl_events, rf2)
+        rf2.write(' End of Closed events \n')
         # must also get events from archive
         closed_events_from_archive = zep.getEventSummariesGenerator(event_filter, archive=True)
+        cla_events = []
+        for c in closed_events_from_archive:
+            cla_events.append(c)
+        rf2.write(' Closed Archive events are \n')
+        pprint.pprint(cla_events, rf2)
+        rf2.write(' End of Closed Archive events \n')
 
+        eventsList = op_events
+        eventsList.extend(cl_events)
+        eventsList.extend(cla_events)
+        #eventsList = []
+        #for evtsumm in chain(open_events, closed_events, closed_events_from_archive):
+        #    eventsList.append(evtsumm)
+
+        rf2.write(' eventsList follows \n')
+        pprint.pprint(eventsList, rf2)
         # Don't put print / log statements in the next block
         #  Previous block uses a Python generator function to deliver events asynchronously
-        for evtsumm in chain(open_events, closed_events, closed_events_from_archive):
+        #for evtsumm in chain(open_events, closed_events, closed_events_from_archive):
+        for evtsumm in eventsList:
+            rf2.write(' eventsumm follows \n')
+            pprint.pprint(evtsumm, rf2)
+            rf2.write(' end of eventsumm \n')
             first = evtsumm['first_seen_time']
             # if event is still open, downtime persists til end of report window
             if evtsumm['status'] not in CLOSED_EVENT_STATUSES:
@@ -329,6 +363,7 @@ class CReport(object):
             # clip first and last within report time window
             first = max(first, startDate)
             last = min(last, endDate)
+            rf2.write(' first is %s and last is %s \n' % (first, last))
 
             evt = evtsumm['occurrence'][0]
             evt_actor = evt['actor']
@@ -345,6 +380,7 @@ class CReport(object):
                 dclass = device.getDeviceClassPath()
                 link = device.getDeviceLink()
                 title = device.titleOrId()
+                rf2.write(' building availabilityReport. device is %s, downtime is %s, total_report_window is %s, groupname is %s, sysname is %s, loc is %s, dclass is %s, link is %s, title is %s \n ' % (deviceId, downtime, total_report_window, groupname, sysname, loc, dclass, link, title))
                 availabilityReport.append(AvailabilityColl(deviceId, '', downtime, total_report_window, groupname, sysname, loc, dclass, link, title))
                 device._p_invalidate()
 
@@ -396,9 +432,10 @@ if __name__ == '__main__':
     z = ZCmdBase()
     pprint.pprint(r.run(z.dmd))
     print 'End of zeroth query'
-    a = query(z.dmd, start, device='zen42.class.example.org', eventClass=Status_Ping)
+    a = query(z.dmd, start, device='zenny1.class.example.org',  eventClass=Status_Ping)
     assert 0 <= float(a[0]) <= 1.
-    b = query(z.dmd, start, device='zen42.class.example.org', eventClass=Status_Ping)
+    b = query(z.dmd, start, device='zenny1.class.example.org', eventClass=Status_Ping)
+    print 'a is %s and b is %s \n' % (a, b)
     assert a == b
     assert id(a) == id(b)
     pprint.pprint(r.run(z.dmd))
