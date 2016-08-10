@@ -23,8 +23,9 @@
 
     objects python:here.ReportServer.plugin('AvailabilityCollection', here.REQUEST);
     batch python:tm.getBatch(tableName,objects);
-	exportFields python:['device',  'title', 'availability'];
-	">
+    exportFields python:['device',  'title', 'availability'];
+    ">
+
 <tal:block metal:use-macro="here/reportMacros/macros/exportableReport">
 <tal:block metal:fill-slot="report">
 
@@ -41,7 +42,10 @@
 <span>
 
 <form id="availabilityForm" method="submit">
-<table class="zentable" cellpadding="3" cellspacing="1">
+<tal:block tal:define=" tabletitle string:Set End Date to tomorrow to include data from today ">
+  <tal:block metal:use-macro="here/zenuimacros/macros/zentable">
+    <tal:block metal:fill-slot="zentablecontents">
+
     <tr>
         <td class="tableheader">Device Class:</td>
         <td class="tablevalues">
@@ -149,7 +153,9 @@
          <input class="tablevalues" type="Submit" value="Generate"/>
        </td> 
     </tr>
-</table>
+      </tal:block>
+    </tal:block>
+  </tal:block>
 </form>
 
 <script type="text/javascript">

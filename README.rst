@@ -31,6 +31,15 @@ below.
 
 * Zenoss 3.0+ `Latest Package for Python 2.7`_
 
+Usage
+=====
+Note that to include availability upto and including "now", the end date must be set to "tomorrow".
+
+A version of the AvailabilityCollection plugin is provided with lots of debugging to
+$ZENHOME/log/Availability/AvailabilityRep2.out.  This logfile is recreated every time the report
+is run so should not fill up diskspace; however this version adds *significant* performance overhead;
+do not use in production.
+
 Installation
 ============
 Normal Installation (packaged egg)
@@ -55,7 +64,7 @@ developer mode::
 Configuration
 =============
 
-Tested with Zenoss 3.1 
+Tested with Zenoss 3.1 and 4.2.5
 
 Change History
 ==============
@@ -74,11 +83,12 @@ Change History
                          Sample reportemail included in libexec and extra screenshots
                          Git master branch - output includes system, location, group and deviceclass
                          Git title branch - output just has device id, title, link and availability
+    * Updated to 1.4.0 - Change report title for usage. Debug version of plugin shipped.
 
 
 .. External References Below. Nothing Below This Line Should Be Rendered
 
-.. _Latest Package for Python 2.7: https://github.com/jcurry/ZenPacks.community.AvailabilityReportPerCollection/blob/title/dist/ZenPacks.community.AvailabilityReportPerCollection-1.3.0-py2.7.egg?raw=true
+.. _Latest Package for Python 2.7: https://github.com/jcurry/ZenPacks.community.AvailabilityReportPerCollection/blob/title/dist/ZenPacks.community.AvailabilityReportPerCollection-1.4.0-py2.7.egg?raw=true
 
 
                                                                         
